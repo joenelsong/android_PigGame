@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="pref_number_of_dice"
+        android:title="Number of Dice"
+        android:defaultValue="1">
+    </EditTextPreference>
+    <EditTextPreference
+        android:key="pref_play_to_score"
+        android:title="Points needed to win"
+        android:defaultValue="100">
+    </EditTextPreference>
+    <ListPreference
+        android:key="pref_sides_to_die"
+        android:entries="@array/die_sides_alignment"
+        android:entryValues="@array/die_sides_values"
+        android:title="Number of Sides on die">
+
+    </ListPreference>
+
+</PreferenceScreen>
