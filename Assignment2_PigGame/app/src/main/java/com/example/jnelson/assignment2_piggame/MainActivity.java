@@ -19,6 +19,7 @@ package com.example.jnelson.assignment2_piggame;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -78,7 +79,7 @@ public class MainActivity extends ActionBarActivity {
         mDieImage2 = (ImageView) findViewById(R.id.dieImage2);
         mDieImage3 = (ImageView) findViewById(R.id.dieImage3);
 
-        savedValues = getSharedPreferences("clickCounterPrefs", MODE_PRIVATE);
+        savedValues = PreferenceManager.getDefaultSharedPreferences(this);
 
 
         // Initialize UI elements
@@ -142,11 +143,11 @@ public class MainActivity extends ActionBarActivity {
         * *************************************************************** */
 
         // PLAY TO SCORE
-        PLAYTOSCORE = savedValues.getInt("pref_play_to_score", 20);
+        PLAYTOSCORE = Integer.parseInt(savedValues.getString("pref_play_to_score", "20"));
         game.setPOINTS_TO_WIN(PLAYTOSCORE);
 
         // SIDES ON DIE
-        SIDESONDIE = savedValues.getInt("pref_sides_to_die", 6);
+        SIDESONDIE = Integer.parseInt(savedValues.getString("pref_sides_to_die", "6"));
         game.setSIDES_ON_DIE(SIDESONDIE);
 
         mDieImages = new int[SIDESONDIE];
@@ -173,7 +174,7 @@ public class MainActivity extends ActionBarActivity {
                 }
 
         // NUMBER OF DICE
-        NUMBEROFDICE = savedValues.getInt("pref_number_of_dice", 1);
+        NUMBEROFDICE = Integer.parseInt(savedValues.getString("pref_number_of_dice", "1"));
         game.setNUMBER_OF_DICE(NUMBEROFDICE);
 
 
