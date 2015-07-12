@@ -23,7 +23,7 @@ public class PigGame {
     private int mActivePlayerIndex;
 
     private int mWinnerIndex;
-    private int mDie;
+    private int[] mDie;
 
     private int mTempScore;
 
@@ -36,6 +36,11 @@ public class PigGame {
     {
         POINTS_TO_WIN = playtoscore;
         SIDES_ON_DIE = dieSides;
+
+        mDie = new int[3];
+        for (int i = 0; i<3; i++) {
+            mDie[i] = 0;
+    }
 
         // Create Players
         mPlayer1 = new Player(0);
@@ -61,32 +66,35 @@ public class PigGame {
     public int getNUMBER_OF_DICE() {  return NUMBER_OF_DICE;  }
 
     public void setmActivePlayerIndex(int x) {  this.mActivePlayerIndex = x;  }
-    public void setmDie(int x) {  this.mDie = x;  }
+    public void setmDie(int i, int x) {  this.mDie[i] = x;  }
+    public int  getmDie(int i) { return mDie[i]; }
+
     public void setmWinnerIndex(int x) {  this.mWinnerIndex = x;  }
     public void setmTempScore(int x) {  this.mTempScore = x;  }
     public int getmActivePlayerIndex() {  return mActivePlayerIndex;  }
     public Player getActivePlayer() { return mPlayers[mActivePlayerIndex]; }
 
-    public int getmDie() { return mDie; }
+
     public Player[] getPlayers() { return mPlayers; }
 
     public int getmTempScore() {    return mTempScore;    }
     public int getmWinnerIndex() {     return mWinnerIndex;    }
 
-    public void RollDie()
-    {
-        mDie = (int)(Math.random()*SIDES_ON_DIE) + 1; // Returns a Die equal to a value from 1 to 6 to simulate a die roll
-        if (mDie != 1) {
-            mTempScore += mDie;
+    public void RollDie() {
+        for (int i = 0; i < NUMBER_OF_DICE; i++) {
+            mDie[i] = (int) (Math.random() * SIDES_ON_DIE) + 1; // Returns a Die equal to a value from 1 to 6 to simulate a die roll
+            if (mDie[i] != 1) {
+                mTempScore += mDie[i];
+            } else {
+                mTempScore = 0;
+                break; // exit loop because a 1 was rolled and no points will be scored
+            }
         }
-        else {
-            mTempScore = 0;
-        }
-        // Check to see if the active player has won
-        if ((mPlayers[mActivePlayerIndex].getmScore() + mTempScore) >= POINTS_TO_WIN){
-            mPlayers[mActivePlayerIndex].AddToScore(mTempScore); // Force Award Points to end game and prevent stupid user play
-            EndGame();
-        }
+            // Check to see if the active player has won
+            if ((mPlayers[mActivePlayerIndex].getmScore() + mTempScore) >= POINTS_TO_WIN) {
+                mPlayers[mActivePlayerIndex].AddToScore(mTempScore); // Force Award Points to end game and prevent stupid user play
+                EndGame();
+            }
     }
 
     public void PassTurn()
@@ -149,9 +157,11 @@ public class PigGame {
             switch (next) {
                 case 1:
                     game.RollDie();
-                    System.out.println("You Rolled a: " + game.getmDie());
-                    System.out.println("Your Score is: " + game.getActivePlayer().getmScore());
-                    break;
+                    for (int i =0; i<game.NUMBER_OF_DICE; i++) {
+                        System.out.println("You Rolled a: " + game.getmDie(i));
+                    }
+                        System.out.println("Your Score is: " + game.getActivePlayer().getmScore());
+                         break;
                 case 2:
                     game.PassTurn();
                     System.out.println("Player " + game.getmActivePlayerIndex() + " is now the active player");

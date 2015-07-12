@@ -19,6 +19,7 @@ package com.example.jnelson.assignment2_piggame;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -42,6 +44,9 @@ public class MainActivity extends ActionBarActivity {
     private int SIDESONDIE = 6;
     private int NUMBEROFDICE = 1;
     private int[] mDieImages;
+    private int BACKGROUND;
+    private LinearLayout mLayout;
+
 
     private PigGame game;
 
@@ -60,11 +65,10 @@ public class MainActivity extends ActionBarActivity {
     private ImageView mDieImage;
     private ImageView mDieImage2;
     private ImageView mDieImage3;
+    private ImageView[] mDice;
 
     private Button mRollDiceButton;
     private Button mPassTurn;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +76,18 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mLayout =(LinearLayout)findViewById(R.id.main);
+
         game = new PigGame(PLAYTOSCORE, SIDESONDIE);
 
         // initialize image views
         mDieImage = (ImageView) findViewById(R.id.dieImage);
         mDieImage2 = (ImageView) findViewById(R.id.dieImage2);
         mDieImage3 = (ImageView) findViewById(R.id.dieImage3);
+
+        mDice = new ImageView[3];
+
+        mDice[0] = mDieImage; mDice[1]= mDieImage2; mDice[2]=mDieImage3;
 
         savedValues = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -105,6 +115,8 @@ public class MainActivity extends ActionBarActivity {
         mPassTurn = (Button) findViewById(R.id.passTurn);
 
 
+
+
         if( savedInstanceState != null ) {
             // Load Player and Temporary round scores
             game.getPlayers()[0].setmScore(savedInstanceState.getInt("mPlayer1_Score_save"));
@@ -115,8 +127,10 @@ public class MainActivity extends ActionBarActivity {
             game.setmActivePlayerIndex(savedInstanceState.getInt("mActivePlayerIndex_Save"));
             UpdateActivePlayer(); // Update UI
 
-            game.setmDie(savedInstanceState.getInt("mDie_Save"));
-            UpdateDie(mDieImage); // Update Die UI
+            game.setmDie(savedInstanceState.getInt("mDie_Save1"),0);
+            if (NUMBEROFDICE > 1) { game.setmDie(savedInstanceState.getInt("mDie_Save2"),1); }
+            if (NUMBEROFDICE > 1) { game.setmDie(savedInstanceState.getInt("mDie_Save3"),2); }
+            UpdateDie(mDice[0], 1); // Update Die UI
 
             game.setmWinnerIndex(savedInstanceState.getInt("mWinnerIndex_save")); //Update Game State
 
@@ -161,7 +175,7 @@ public class MainActivity extends ActionBarActivity {
                         mDieImages[5] = R.drawable.die6;
                         break;
                     case 10: mDieImages[0] = R.drawable.tendie1;
-                        mDieImages[1] = R.drawable.tendie2;
+                        mDieImages[1] = R.drawable.tendie2  ;
                         mDieImages[2] = R.drawable.tendie3;
                         mDieImages[3] = R.drawable.tendie4;
                         mDieImages[4] = R.drawable.tendie5;
@@ -177,16 +191,27 @@ public class MainActivity extends ActionBarActivity {
         NUMBEROFDICE = Integer.parseInt(savedValues.getString("pref_number_of_dice", "1"));
         game.setNUMBER_OF_DICE(NUMBEROFDICE);
 
-
-
-        mDieImage.setImageResource(mDieImages[4]);
+        mDice[0].setImageResource(mDieImages[4]);
         if (NUMBEROFDICE > 1) {
-            mDieImage2.setImageResource(mDieImages[4]);
+            mDice[1].setImageResource(mDieImages[4]);
             if (NUMBEROFDICE > 2) {
-                mDieImage3.setImageResource(mDieImages[4]);
+                mDice[2].setImageResource(mDieImages[4]);
+            } else {
+                mDice[2].setImageResource(0);
             }
         }
-
+        else {
+            mDice[1].setImageResource(0);
+            mDice[2].setImageResource(0);
+        }
+        // SET BACKGROUND
+        BACKGROUND = Integer.parseInt(savedValues.getString("pref_bgcolor", "0"));
+        if (BACKGROUND == 2) {
+            mLayout.setBackgroundColor(1);
+        }
+        else if (BACKGROUND == 1) {
+        mLayout.setBackgroundResource(R.drawable.pigbackground);
+        }
 
         if (logging) Log.d("MainActivity", "Finish: OnResume()");
     }
@@ -220,7 +245,11 @@ public class MainActivity extends ActionBarActivity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // Game Saves
-        outState.putInt("mDie_Save", game.getmDie());
+        outState.putInt("mDie_Save1", game.getmDie(0));
+        if (NUMBEROFDICE > 1) { outState.putInt("mDie_Save2", game.getmDie(1)); }
+        if (NUMBEROFDICE > 2) { outState.putInt("mDie_Save3", game.getmDie(2)); }
+
+        //outState.putInt("mDie_Save3", game.getmDie(2));
         outState.putInt("mActivePlayerIndex_Save", game.getmActivePlayerIndex());
         outState.putInt("mWinnerIndex_save", game.getmWinnerIndex());
         outState.putInt("mPlayer1_Score_save", game.getPlayers()[0].getmScore());
@@ -266,14 +295,15 @@ public class MainActivity extends ActionBarActivity {
         mP2Score.setText( Integer.toString(game.getPlayers()[1].getmScore()) );
     }
 
-    public void  UpdateDie(ImageView imgv)
+    public void  UpdateDie(ImageView imgv, int x)
     {
-        switch (game.getmDie()) { // Update UI to display the dice roll
+        System.out.println("Die Roll was: "+ game.getmDie(x)); // DEBUG
+        switch (game.getmDie(x)) { // Update UI to display the dice roll
             case 1: imgv.setImageResource(mDieImages[0]);
                 mTempScore = 0;
                 mRollDiceButton.setEnabled(false);
                 break;
-            default: imgv.setImageResource(mDieImages[game.getmDie()-1]);
+            default: imgv.setImageResource(mDieImages[game.getmDie(x)-1]);
                 break;
         }
     }
@@ -293,8 +323,13 @@ public class MainActivity extends ActionBarActivity {
      **********************************************************************************************/
     public void RollOnClick(View target) {
         game.RollDie();
-        int outcome = game.getmDie();
-        UpdateDie(mDieImage);
+
+        int outcome = 0;
+        for (int i=0; i<NUMBEROFDICE; i++) {
+            outcome += game.getmDie(i);
+            UpdateDie(mDice[i],i);
+        }
+
 
         if (outcome != 0)
             mTempScore += outcome;
@@ -322,6 +357,8 @@ public class MainActivity extends ActionBarActivity {
 
     public void NewGameOnClick(View target) {
         game = new PigGame(PLAYTOSCORE, SIDESONDIE);
+        onStart();
+        onResume();
 
         //enable play buttons
         mRollDiceButton.setEnabled(true);

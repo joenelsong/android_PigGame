@@ -19,8 +19,13 @@
         android:entries="@array/dice_number_alignment"
         android:entryValues="@array/dice_number_values"
         android:title="Number of Dice">
-
     </ListPreference>
 
+    <ListPreference
+        android:key="pref_bgcolor"
+        android:entries="@array/bgcolor_alignment"
+        android:entryValues="@array/bgcolor_values"
+        android:title="Background Color">
+    </ListPreference>
 
 </PreferenceScreen>
