@@ -1,9 +1,17 @@
 <resources>
     <string name="app_name">Pig 2.0</string>
+    <!--nnnnnnnnnnnnnnnn-->
+    <!-- FIRST ACTIVITY -->
+    <!--uuuuuuuuuuuuuuuu-->
+    <string name="game_welcome_msg">Instructions: Enter player names and then press the start button below to begin the game</string>
+    <string name="start_game">Start Game</string>
+    <string name="enter_player1_name">Player 1 name...</string>
+    <string name="enter_player2_name">Player 2 name...</string>
 
     <string name="player1_name_label">(Player 1)</string>
     <string name="player2_name_label">(Player 2)</string>
-    <string name="default_name"> INSERT NAME </string>
+    <string name="default_name"> Jack </string>
+    <string name="default_name2"> Jill </string>
 
 
     <string name="player1_score_label">Score</string>

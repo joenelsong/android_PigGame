@@ -7,6 +7,7 @@ public class Player {
 
     private int mScore;
     private int mNum;
+    private String mName;
     //private boolean mActive;
 
     public Player(int x)
@@ -24,5 +25,9 @@ public class Player {
     public int getmNum() {        return mNum;    }
     public int getmScore() {        return mScore;    }
     //public boolean getmActive() {    return mActive;   }
+
+    public void setmName(String x) {  this.mName = x;    }
+    public String getmName() {  return this.mName;    }
+
 
 }
