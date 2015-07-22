@@ -313,7 +313,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
 
     /**
      * ********************************************************************************************
-     * UI Update Methods                                          *
+     *                                 UI Update Methods                                          *
      * ********************************************************************************************
      */
     // Update Scores
@@ -374,7 +374,6 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
                     outcome += game.getmDie(i);
                     UpdateDie(mDice[i], i);
                 }
-
                 if (outcome != 0)
                     mTempScore += outcome;
                 mTempScoreView.setText(Integer.toString(game.getmTempScore()));
@@ -403,18 +402,24 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
              *  New Game Button Behavior  *
              ******************************/
             case (R.id.newgame):
-                game = new PigGame(PLAYTOSCORE, SIDESONDIE);
-                onStart();
-                onResume();
 
-                //enable play buttons
-                mRollDiceButton.setEnabled(true);
-                mPassTurnButton.setEnabled(true);
+                if (getActivity().findViewById(R.id.first_fragment) == null) {     // using two Activities
+                    startActivity(new Intent(getActivity(), FirstActivity.class));
+                }
+                else { // using 1 Activity (two panes)
+                    game = new PigGame(PLAYTOSCORE, SIDESONDIE);
+                    onStart();
+                    onResume();
 
-                // Update Text fields
-                UpdateScores(); // Update Scores
-                mTurnAux.setText("'s turn");
-                mTempScoreView.setText("0");
+                    //enable play buttons
+                    mRollDiceButton.setEnabled(true);
+                    mPassTurnButton.setEnabled(true);
+
+                    // Update Text fields
+                    UpdateScores(); // Update Scores
+                    mTurnAux.setText("'s turn");
+                    mTempScoreView.setText("0");
+                }
                 break;
         }
     }
