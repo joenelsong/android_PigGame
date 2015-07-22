@@ -6,9 +6,10 @@ package com.example.jnelson.assignment2_piggame;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 
 
-public class FirstActivity extends Activity {
+public class FirstActivity extends ActionBarActivity {
 
     private PigGame game;   // Created and managed in FirstFragment
     private String player1name = "";

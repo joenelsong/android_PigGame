@@ -84,6 +84,8 @@ public class FirstFragment extends Fragment
             //if(!twoPaneLayout) {
             if (true) {
                 Intent intent = new Intent(activity, SecondActivity.class);
+                intent.putExtra("p1name",player1Name.getText().toString() );
+                intent.putExtra("p2name",player2Name.getText().toString() );
                 //int humanHandNum = game.getHumanHand().ordinal();
                 //intent.putExtra("humanHand", humanHandNum);  // send state to 2nd activity
                 startActivity(intent);

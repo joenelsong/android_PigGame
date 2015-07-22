@@ -38,7 +38,7 @@ import android.widget.Toast;
 
 
 public class SecondFragment extends Fragment implements View.OnClickListener {
-    public boolean logging = true;
+    public int logging = 2; // 0 for OFF // 1 for method status // 2 for print statements
     private SecondActivity activity;
 
     private SharedPreferences savedValues;
@@ -76,17 +76,15 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (logging) Log.d("SecondFragment", "Start: onCreateView()");
+        if (logging > 0) Log.d("SecondFragment", "Start: onCreateView()");
         setHasOptionsMenu(true); // Needed for settings to show up when clicked on
         //super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.second_fragment, container, false);
 
-        activity = (SecondActivity) getActivity(); // Get a references from the host activity
-
         mLayout = (LinearLayout) view.findViewById(R.id.main);
 
         game = new PigGame(PLAYTOSCORE, SIDESONDIE);
-        activity.SetGame(game);
+
 
         // initialize image views
         mDieImage = (ImageView) view.findViewById(R.id.dieImage);
@@ -99,7 +97,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
         mDice[1] = mDieImage2;
         mDice[2] = mDieImage3;
 
-        savedValues = PreferenceManager.getDefaultSharedPreferences(activity); // saveValues stored in Activity ?
+
 
         // Initialize UI elements
         mP1Score = (TextView) view.findViewById(R.id.p1ScoreValue);
@@ -112,6 +110,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
         mP1Name = (EditText) view.findViewById(R.id.player1EditText);
         mP2Name = (EditText) view.findViewById(R.id.player2EditText);
 
+
         mTempScoreView = (TextView) view.findViewById(R.id.tempScore);
         mTempScore = 0;
 
@@ -121,8 +120,13 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
         mTurnAux = (TextView) view.findViewById(R.id.turnAux);
 
         mRollDiceButton = (Button) view.findViewById(R.id.rollDie);
+        mRollDiceButton.setOnClickListener(this);
         mPassTurnButton = (Button) view.findViewById(R.id.passTurn);
+        mPassTurnButton.setOnClickListener(this);
         mNewGameButton = (Button) view.findViewById(R.id.newgame);
+        mNewGameButton.setOnClickListener(this);
+
+
 
         if (savedInstanceState != null) {
             // Load Player and Temporary round scores
@@ -148,16 +152,30 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
         }
         return view;
     }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        if (logging > 0) Log.d("FirstFragment", "Start: onActivityCreated()");
+        super.onActivityCreated(savedInstanceState);
+
+        activity = (SecondActivity) getActivity(); // Get a references from the host activity
+        activity.SetGame(game);
+        savedValues = PreferenceManager.getDefaultSharedPreferences(activity); // saveValues stored in Activity ?
+
+        if (logging > 1) System.out.println("Player 1 name: " + activity.p1name);
+        mP1Name.setText(activity.p1name);
+        if (logging > 1) System.out.println("Player 2 name: " + activity.p2name);
+        mP2Name.setText(activity.p1name);
+    }
 
     @Override
     public void onStart() {
-        if (logging) Log.d("SecondFragment", "Start: onStart()");
+        if (logging > 0) Log.d("SecondFragment", "Start: onStart()");
         super.onStart();
     }
 
     @Override
     public void onResume() {
-        if (logging) Log.d("SecondFragment", "Start: OnResume()");
+        if (logging > 0) Log.d("SecondFragment", "Start: OnResume()");
 
         super.onResume();
         /* ************************************************************** *
@@ -225,7 +243,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onPause() {
-        if (logging) Log.d("SecondFragment", "Start: onPause()");
+        if (logging > 0) Log.d("SecondFragment", "Start: onPause()");
         super.onPause();
         //SharedPreferences.Editor editor = savedValues.edit();
         //editor.putInt("count", count);
@@ -234,19 +252,19 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onStop() {
-        if (logging) Log.d("SecondFragment", "Start: onStop()");
+        if (logging > 0) Log.d("SecondFragment", "Start: onStop()");
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
-        if (logging) Log.d("SecondFragment", "Start: onDestroy()");
+        if (logging > 0) Log.d("SecondFragment", "Start: onDestroy()");
         super.onDestroy();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-
+        if (logging > 0) Log.d("SecondFragment", "Start: onSaveInstanceState()");
         super.onSaveInstanceState(outState);
         // Game Saves
         outState.putInt("mDie_Save1", game.getmDie(0));
@@ -267,12 +285,14 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (logging > 0) Log.d("SecondFragment", "Start: onCreateOptionsMenu()");
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_main, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (logging > 0) Log.d("SecondFragment", "Start: onOptionsItemSelected()");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -298,13 +318,18 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
      */
     // Update Scores
     public void UpdateScores() {
+        if (logging > 0) Log.d("SecondFragment", "Start: UpdateScores()");
+        if (logging > 1)System.out.println("Temp score is: " + game.getmTempScore());
+        if (logging > 1)System.out.println("Play 1 score is: " + game.getPlayers()[0].getmScore());
+        if (logging > 1)System.out.println("Play 2 score is: " + game.getPlayers()[1].getmScore());
         mTempScoreView.setText(Integer.toString(game.getmTempScore()));
         mP1Score.setText(Integer.toString(game.getPlayers()[0].getmScore()));
         mP2Score.setText(Integer.toString(game.getPlayers()[1].getmScore()));
     }
 
     public void UpdateDie(ImageView imgv, int x) {
-        System.out.println("Die Roll was: " + game.getmDie(x)); // DEBUG
+        if (logging > 0) Log.d("SecondFragment", "Start: UpdateDie()");
+        if (logging > 1) System.out.println("Die Roll was: " + game.getmDie(x)); // DEBUG
         switch (game.getmDie(x)) { // Update UI to display the dice roll
             case 1:
                 imgv.setImageResource(mDieImages[0]);
@@ -318,6 +343,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
     }
 
     public void UpdateActivePlayer() {
+        if (logging > 0) Log.d("SecondFragment", "Start: UpdatingActivePlayer()");
         switch (game.getmActivePlayerIndex()) {
             case 0:
                 mWhosTurn.setText(mP1Name.getText());
@@ -330,12 +356,14 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
 
     /**
      * ********************************************************************************************
-     * UI Event Listeners                                         *
+     *                                 UI Event Listeners                                         *
      * ********************************************************************************************
      */
     public void onClick(View target) {
+        if (logging > 0) Log.d("SecondFragment", "Start: onClick()");
 
         switch (target.getId()) {
+
             /******************************
              *  Roll Dice Button Behavior  *
              ******************************/
@@ -364,9 +392,10 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
              *  Pass Turn Button Behavior *
              ******************************/
             case (R.id.passTurn):
+                game.PassTurn();
                 UpdateScores(); // Update Scores
                 UpdateActivePlayer(); // Update Whos turn it is indicator
-                //System.out.println("Active Player: " + Integer.toString(game.getmActivePlayer().getmNum()) );
+                if (logging > 1) System.out.println("Active Player: " + game.getPlayers()[game.getmActivePlayerIndex()].getmName());
                 mRollDiceButton.setEnabled(true);
                 break;
 
