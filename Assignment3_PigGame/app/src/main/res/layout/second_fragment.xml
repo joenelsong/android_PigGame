@@ -244,24 +244,21 @@
             android:id="@+id/rollDie"
             android:layout_weight="1"
             android:clickable="true"
-            android:nestedScrollingEnabled="false"
-            android:onClick="RollOnClick" />
+            android:nestedScrollingEnabled="false"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/end_turn"
             android:id="@+id/passTurn"
-            android:layout_weight="1"
-            android:onClick="PassTurnOnClick" />
+            android:layout_weight="1"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/new_game"
-            android:id="@+id/button3"
-            android:layout_weight="1"
-            android:onClick="NewGameOnClick" />
+            android:id="@+id/newgame"
+            android:layout_weight="1"/>
     </LinearLayout>
 
 </LinearLayout>

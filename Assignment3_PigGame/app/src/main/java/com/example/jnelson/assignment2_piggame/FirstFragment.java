@@ -31,7 +31,7 @@ public class FirstFragment extends Fragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        if (logging) Log.d("FirstFragment", "Start: onCreateView()");
         View view = inflater.inflate(R.layout.first_fragment, container, false);
 
         // Set this fragment to listen for the Play button's click event
@@ -45,7 +45,8 @@ public class FirstFragment extends Fragment
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState)
+    {   if (logging) Log.d("FirstFragment", "Start: onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
         activity = (FirstActivity) getActivity(); // Get a references from the host activity
@@ -63,7 +64,7 @@ public class FirstFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(Bundle outState)
-    {
+    {  if (logging) Log.d("FirstFragment", "Start: onSaveInstanceState()");
         /* ************************************************************** *
         *                     Save Player Names                           *
         * *************************************************************** */
@@ -73,20 +74,21 @@ public class FirstFragment extends Fragment
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    { if (logging) Log.d("FirstFragment", "Start: onClick()");
         if(v.getId() == R.id.start) {
-            Toast.makeText(getActivity(), "Staring Game", Toast.LENGTH_SHORT).show();
-            game.getPlayers()[0].setmName(player1Name.getText().toString());  // Save Player1 entered name with game object
-            game.getPlayers()[0].setmName(player2Name.getText().toString());  // Save Player2 entered name with game object
+            Toast.makeText(activity, "Staring Game", Toast.LENGTH_SHORT).show();
+            activity.SetName1(player1Name.getText().toString());  // Save Player1 entered name with game object
+            activity.SetName2(player2Name.getText().toString());  // Save Player2 entered name with game object
         }
-            if(!twoPaneLayout) {
+            //if(!twoPaneLayout) {
+            if (true) {
                 Intent intent = new Intent(activity, SecondActivity.class);
                 //int humanHandNum = game.getHumanHand().ordinal();
                 //intent.putExtra("humanHand", humanHandNum);  // send state to 2nd activity
                 startActivity(intent);
             }
     }
-
 }
 
 

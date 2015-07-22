@@ -14,6 +14,7 @@ public class Player {
     {
         mScore = 0;
         mNum = x;
+        mName ="player";
         //mActive = false;
     }
 

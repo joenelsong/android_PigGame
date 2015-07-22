@@ -11,6 +11,11 @@ import android.os.Bundle;
 public class FirstActivity extends Activity {
 
     private PigGame game;   // Created and managed in FirstFragment
+    private String player1name = "";
+    private String player2name = "";
+
+    public void SetName1(String s) {        player1name = s;    }
+    public void SetName2(String s) {        player2name = s;    }
 
     public PigGame getGame() {
         return game;
