@@ -50,6 +50,9 @@ public class FirstFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
 
         activity = (FirstActivity) getActivity(); // Get a references from the host activity
+        // Check to see if FirstActivity has loaded a single or dual pane layout
+        twoPaneLayout = activity.findViewById(R.id.second_fragment) != null;
+
         /* ************************************************************** *
         *                     Load Saved Player Names                     *
         * *************************************************************** */
@@ -57,9 +60,10 @@ public class FirstFragment extends Fragment
             player1Name.setText(savedInstanceState.getString("player1namesave", "@string/default_name"));
             player2Name.setText(savedInstanceState.getString("player2namesave", "@string/default_name"));
 
-            // Check to see if FirstActivity has loaded a single or dual pane layout
-            twoPaneLayout = activity.findViewById(R.id.second_fragment) != null;
+
         }
+
+
     }
 
     @Override
@@ -81,8 +85,8 @@ public class FirstFragment extends Fragment
             activity.SetName1(player1Name.getText().toString());  // Save Player1 entered name with game object
             activity.SetName2(player2Name.getText().toString());  // Save Player2 entered name with game object
         }
-            //if(!twoPaneLayout) {
-            if (true) {
+
+            if (!twoPaneLayout) {
                 Intent intent = new Intent(activity, SecondActivity.class);
                 intent.putExtra("p1name",player1Name.getText().toString() );
                 intent.putExtra("p2name",player2Name.getText().toString() );

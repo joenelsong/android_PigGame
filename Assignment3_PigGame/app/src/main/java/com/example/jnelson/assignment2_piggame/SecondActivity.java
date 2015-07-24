@@ -20,14 +20,6 @@ public class SecondActivity extends Activity
         if (logging) Log.d("SecondActivity", "Start: OnCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_activity);
-
-        Intent intent = getIntent();
-        if (null != intent) {
-            p1name= intent.getStringExtra("p1name");
-            System.out.println("SecondActivity Player 1 name: "+ p1name);
-            p2name= intent.getStringExtra("p2name");
-            System.out.println("SecondActivity Player 2 name: "+ p2name);
-        }
     }
 
     @Override
@@ -44,6 +36,12 @@ public class SecondActivity extends Activity
 
         // Get the game state sent from the FirstActivity
         Intent intent = getIntent();
+        if (null != intent) {
+            p1name= intent.getStringExtra("p1name");
+            System.out.println("SecondActivity Player 1 name: "+ p1name);
+            p2name= intent.getStringExtra("p2name");
+            System.out.println("SecondActivity Player 2 name: "+ p2name);
+        }
         // Get Extra saved values?
 
         if (game == null)   // We might already have a game object

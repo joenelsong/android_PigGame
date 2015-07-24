@@ -58,8 +58,8 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
     private int mTempScore;
     private TextView[] mPlayerScores;
 
-    private EditText mP1Name;
-    private EditText mP2Name;
+    private TextView mP1Name;
+    private TextView mP2Name;
 
     private TextView mWhosTurn;
     private TextView mTurnAux;
@@ -85,7 +85,6 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
 
         game = new PigGame(PLAYTOSCORE, SIDESONDIE);
 
-
         // initialize image views
         mDieImage = (ImageView) view.findViewById(R.id.dieImage);
         mDieImage2 = (ImageView) view.findViewById(R.id.dieImage2);
@@ -98,7 +97,6 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
         mDice[2] = mDieImage3;
 
 
-
         // Initialize UI elements
         mP1Score = (TextView) view.findViewById(R.id.p1ScoreValue);
         mP2Score = (TextView) view.findViewById(R.id.p2ScoreValue);
@@ -107,8 +105,8 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
         mPlayerScores[0] = mP1Score;
         mPlayerScores[1] = mP2Score;
 
-        mP1Name = (EditText) view.findViewById(R.id.player1EditText);
-        mP2Name = (EditText) view.findViewById(R.id.player2EditText);
+        mP1Name = (TextView) view.findViewById(R.id.player1Text);
+        mP2Name = (TextView ) view.findViewById(R.id.player2Text);
 
 
         mTempScoreView = (TextView) view.findViewById(R.id.tempScore);
@@ -125,7 +123,6 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
         mPassTurnButton.setOnClickListener(this);
         mNewGameButton = (Button) view.findViewById(R.id.newgame);
         mNewGameButton.setOnClickListener(this);
-
 
 
         if (savedInstanceState != null) {
@@ -150,6 +147,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
             game.setmWinnerIndex(savedInstanceState.getInt("mWinnerIndex_save")); //Update Game State
 
         }
+        UpdateScores(); // Update Scores UIs
         return view;
     }
     @Override
@@ -157,14 +155,6 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
         if (logging > 0) Log.d("FirstFragment", "Start: onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        activity = (SecondActivity) getActivity(); // Get a references from the host activity
-        activity.SetGame(game);
-        savedValues = PreferenceManager.getDefaultSharedPreferences(activity); // saveValues stored in Activity ?
-
-        if (logging > 1) System.out.println("Player 1 name: " + activity.p1name);
-        mP1Name.setText(activity.p1name);
-        if (logging > 1) System.out.println("Player 2 name: " + activity.p2name);
-        mP2Name.setText(activity.p1name);
     }
 
     @Override
@@ -176,6 +166,14 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         if (logging > 0) Log.d("SecondFragment", "Start: OnResume()");
+        activity = (SecondActivity) getActivity(); // Get a references from the host activity
+        activity.SetGame(game);
+        savedValues = PreferenceManager.getDefaultSharedPreferences(activity); // saveValues stored in Activity ?
+
+        if (logging > 1) System.out.println("Player 1 name: " + activity.p1name);
+        mP1Name.setText(activity.p1name);
+        if (logging > 1) System.out.println("Player 2 name: " + activity.p2name);
+        mP2Name.setText(activity.p2name);
 
         super.onResume();
         /* ************************************************************** *
@@ -404,6 +402,17 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
             case (R.id.newgame):
 
                 if (getActivity().findViewById(R.id.first_fragment) == null) {     // using two Activities
+                    game = new PigGame(PLAYTOSCORE, SIDESONDIE);
+                    onStart();
+                    onResume();
+                    //enable play buttons
+                    mRollDiceButton.setEnabled(true);
+                    mPassTurnButton.setEnabled(true);
+
+                    // Update Text fields
+                    UpdateScores(); // Update Scores
+                    mTurnAux.setText("'s turn");
+                    mTempScoreView.setText("0");
                     startActivity(new Intent(getActivity(), FirstActivity.class));
                 }
                 else { // using 1 Activity (two panes)

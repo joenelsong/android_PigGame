@@ -52,10 +52,10 @@
         android:id="@+id/playersEdit"
         android:gravity="top">
 
-        <EditText
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/player1EditText"
+            android:id="@+id/player1Text"
             android:layout_weight="1"
             android:layout_marginRight="20dp"
             android:background="#ff909090"
@@ -63,15 +63,15 @@
             android:inputType="text"
             android:text="@string/default_name" />
 
-        <EditText
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/player2EditText"
+            android:id="@+id/player2Text"
             android:layout_weight="1"
             android:layout_marginLeft="20dp"
             android:background="#ff929292"
             android:editable="true"
-            android:text="@string/default_name"
+            android:text="@string/default_name2"
             android:inputType="text" />
     </LinearLayout>
 
